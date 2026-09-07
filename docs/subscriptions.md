@@ -80,6 +80,9 @@ answers `ALREADY_CHARGED` rather than charging twice.
 
 ## Cancellation
 
+Runnable: [`examples/Http/Controllers/CancelSubscriptionController.php`](../examples/Http/Controllers/CancelSubscriptionController.php),
+[`RestoreAllowanceController.php`](../examples/Http/Controllers/RestoreAllowanceController.php).
+
 Stopping collection is yours: stop calling `charge()`. Revoking the on-chain authorization is the
 customer's own transaction — `createCancellationSession()` returns a browser-safe token for the
 hosted cancel page. Never hand a browser the capability itself.

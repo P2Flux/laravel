@@ -74,9 +74,13 @@ final class SubscriptionSignupController extends Controller
         $subscription->update([
             'status' => 'active',
             'capability' => $input['capability'],
+            'p2flux_subscription_id' => $state['subscription_id'] ?? null,
+            'period_seconds' => $state['terms']['period'],
+            'period_index' => $state['period_index'] ?? 0,
             'next_charge_at' => now(),
         ]);
 
-        return response()->json(['status' => 'active']);
+        // Never return the capability. It can charge, so it belongs in your database and nowhere else.
+        return response()->json(['status' => 'active', 'subscription' => $subscription->id]);
     }
 }

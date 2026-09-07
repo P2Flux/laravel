@@ -35,13 +35,16 @@ return [
     | Request timeout
     |--------------------------------------------------------------------------
     |
-    | Seconds. The SDK's own default is 60, because a charge waits for on-chain
-    | confirmation, which on a busy public RPC can take tens of seconds.
-    | Abandoning early is safe but noisy: the payment may still land, and the
-    | next call answers ALREADY_CHARGED.
+    | Seconds, as a positive integer. The SDK's own default is 60, because a
+    | charge waits for on-chain confirmation, which on a busy public RPC can
+    | take tens of seconds. Abandoning early is safe but noisy: the payment may
+    | still land, and the next call answers ALREADY_CHARGED.
+    |
+    | A blank, non-numeric or non-positive value is refused when the client is
+    | first resolved, rather than becoming "no timeout at all".
     |
     */
 
-    'timeout' => (int) env('P2FLUX_TIMEOUT', 60),
+    'timeout' => env('P2FLUX_TIMEOUT', 60),
 
 ];

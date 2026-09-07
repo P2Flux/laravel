@@ -38,8 +38,13 @@
   },
   "autoload-dev": {
     "psr-4": {
-      "P2Flux\\Laravel\\Tests\\": "tests/"
-    }
+      "P2Flux\\Laravel\\Tests\\": "tests/",
+      "App\\": "tests/Examples/App/"
+    },
+    "classmap": [
+      "examples/Http/Controllers",
+      "examples/Console"
+    ]
   },
   "extra": {
     "laravel": {

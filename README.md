@@ -225,6 +225,7 @@ Recipes per outcome: [testing](docs/testing.md).
 | [Testing](docs/testing.md) | Fake transports, canned answers |
 | [Production checklist](docs/production-checklist.md) | Before real money |
 | [Examples](examples/) | Controllers, commands and a test, as application code |
+| [Pre-publication review](docs/pre-packagist-security-review-2026-09-07.md) | The audit this package passed before release |
 
 Protocol detail lives in the PHP SDK's own documentation:
 [sdk-php](https://github.com/P2Flux/sdk-php) · [p2flux.com/docs](https://p2flux.com/docs/)

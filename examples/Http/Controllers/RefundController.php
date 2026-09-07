@@ -53,6 +53,12 @@ final class RefundController extends Controller
                 $request->string('amount_units')->toString(),
             );
         } catch (P2FluxException $e) {
+            /* Release the reservation. Preparing can fail transiently - a 5xx, an unreachable API -
+             * and a reservation left behind would make this order permanently un-refundable, which
+             * is a worse outcome than the failure itself. Nothing was prepared, so nothing is at
+             * risk of being double-refunded by releasing it. */
+            $order->update(['refund_reserved_at' => null]);
+
             return response()->json(['error' => $e->status], 502);
         }
 

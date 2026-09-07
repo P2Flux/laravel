@@ -172,6 +172,35 @@ final class PackageTest extends TestCase
     }
 
     #[Test]
+    public function nothing_reaches_the_network_while_the_application_boots(): void
+    {
+        /* Installing a package must not make an application talk to a payment API on every request.
+         * The client is built lazily inside the singleton closure, so booting - and `about`, which
+         * reads configuration - must never construct it. */
+        $this->assertFalse($this->app->resolved(P2FluxClient::class), 'the client must not be built during boot');
+
+        $transport = new FakeTransport();
+        $this->app->instance(P2FluxClient::class, new P2FluxClient([
+            'apiUrl' => 'https://api.example',
+            'transport' => $transport,
+        ]));
+
+        Artisan::call('about', ['--only' => 'p2flux']);
+        Artisan::call('config:clear');
+
+        $this->assertSame([], $transport->calls, 'no P2Flux request may happen without application code asking for one');
+    }
+
+    #[Test]
+    public function the_package_schedules_nothing(): void
+    {
+        // Billing must never begin because a Composer package was installed.
+        $schedule = $this->app->make(\Illuminate\Console\Scheduling\Schedule::class);
+
+        $this->assertSame([], $schedule->events(), 'the package must register no scheduled task');
+    }
+
+    #[Test]
     public function artisan_about_reports_the_settings_and_no_secrets(): void
     {
         Artisan::call('about', ['--only' => 'p2flux']);

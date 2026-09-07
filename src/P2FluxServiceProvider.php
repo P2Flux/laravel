@@ -33,8 +33,8 @@ final class P2FluxServiceProvider extends ServiceProvider
             $config = self::config($app);
 
             return new P2FluxClient([
-                'apiUrl' => (string) $config['api_url'],
-                'timeout' => (int) $config['timeout'],
+                'apiUrl' => self::apiUrl($config),
+                'timeout' => self::timeout($config),
             ]);
         });
     }
@@ -69,12 +69,66 @@ final class P2FluxServiceProvider extends ServiceProvider
         AboutCommand::add('P2Flux', static function () use ($app): array {
             $config = self::config($app);
 
+            /* `about` is where an operator looks when something is wrong, so it must not throw on
+             * the misconfiguration it is there to reveal. Show the raw value and say it is invalid. */
+            try {
+                $url = self::apiUrl($config);
+            } catch (\InvalidArgumentException) {
+                $url = var_export($config['api_url'], true) . ' (invalid)';
+            }
+            try {
+                $timeout = self::timeout($config) . 's';
+            } catch (\InvalidArgumentException) {
+                $timeout = var_export($config['timeout'], true) . ' (invalid)';
+            }
+
             return [
-                'API URL' => (string) $config['api_url'],
-                'Timeout' => $config['timeout'] . 's',
+                'API URL' => $url,
+                'Timeout' => $timeout,
                 'PHP SDK' => self::sdkVersion(),
             ];
         });
+    }
+
+    /**
+     * @param array{api_url: mixed, timeout: mixed} $config
+     */
+    private static function apiUrl(array $config): string
+    {
+        $url = is_scalar($config['api_url']) ? trim((string) $config['api_url']) : '';
+
+        if ($url === '') {
+            throw new \InvalidArgumentException(
+                'P2FLUX_API_URL (config p2flux.api_url) is empty. Set it to https://api.p2flux.com '
+                . '(Base Mainnet) or https://api-test.p2flux.com (Base Sepolia).'
+            );
+        }
+
+        return $url;
+    }
+
+    /**
+     * A blank, non-numeric or non-positive timeout is refused rather than coerced.
+     *
+     * The alternative is what `(int)` would do with `P2FLUX_TIMEOUT=abc` or an empty value: 0, which
+     * the SDK's curl transport passes to CURLOPT_TIMEOUT, where 0 means "wait forever". A typo in
+     * .env must not silently turn every P2Flux request into an unbounded one.
+     *
+     * @param array{api_url: mixed, timeout: mixed} $config
+     */
+    private static function timeout(array $config): int
+    {
+        $raw = $config['timeout'];
+        $timeout = is_int($raw) || is_string($raw) ? filter_var($raw, FILTER_VALIDATE_INT) : false;
+
+        if ($timeout === false || $timeout < 1) {
+            throw new \InvalidArgumentException(
+                'P2FLUX_TIMEOUT (config p2flux.timeout) must be a positive integer number of seconds, got '
+                . var_export($raw, true) . '.'
+            );
+        }
+
+        return $timeout;
     }
 
     /**
@@ -87,7 +141,7 @@ final class P2FluxServiceProvider extends ServiceProvider
      * up on deploy. Reading the package file as the fallback keeps `P2FLUX_API_URL` working there
      * too, because the file resolves `env()` when it is required.
      *
-     * @return array{api_url: string, timeout: int|string}
+     * @return array{api_url: mixed, timeout: mixed}
      */
     private static function config(Application $app): array
     {
@@ -96,13 +150,13 @@ final class P2FluxServiceProvider extends ServiceProvider
         /** @var array<string, mixed>|null $config */
         $config = $repository->get('p2flux');
 
-        if (!is_array($config) || !isset($config['api_url'], $config['timeout'])) {
-            /** @var array{api_url: string, timeout: int|string} $defaults */
+        if (!is_array($config) || !array_key_exists('api_url', $config) || !array_key_exists('timeout', $config)) {
+            /** @var array{api_url: mixed, timeout: mixed} $defaults */
             $defaults = require __DIR__ . '/../config/p2flux.php';
             $config = array_merge($defaults, is_array($config) ? $config : []);
         }
 
-        /** @var array{api_url: string, timeout: int|string} $config */
+        /** @var array{api_url: mixed, timeout: mixed} $config */
         return $config;
     }
 
