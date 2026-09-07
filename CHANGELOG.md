@@ -21,7 +21,12 @@ First release.
 
 ### Tested
 
-Laravel 11, 12 and 13 on PHP 8.2–8.4, against the lowest and the latest dependency sets. The suite
+Laravel 12 and 13 on PHP 8.2–8.4, against the lowest and the latest dependency sets.
+
+Laravel 11 is deliberately not supported. Every 11.x release is covered by an unpatched security
+advisory (PKSA-mdq4-51ck-6kdq affects `>=11.0.0,<12.0.0`), so Composer's default policy refuses to
+install it and a package claiming that support would only be helping someone past the warning. The
+12 and 13 floors are the first patches clear of the current advisories. The suite
 runs under Orchestra Testbench with package discovery on, proves configuration reaches the SDK
 rather than only Laravel, and repeats the checks against a cached config, which is how production
 boots.

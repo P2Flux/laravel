@@ -3,7 +3,17 @@
   "description": "Official Laravel integration for the P2Flux PHP SDK: USDC payments and subscriptions on Base, settled straight to your own wallet.",
   "type": "library",
   "license": "MIT",
-  "keywords": ["laravel", "payments", "usdc", "stablecoin", "base", "subscriptions", "recurring", "checkout", "erc20"],
+  "keywords": [
+    "laravel",
+    "payments",
+    "usdc",
+    "stablecoin",
+    "base",
+    "subscriptions",
+    "recurring",
+    "checkout",
+    "erc20"
+  ],
   "homepage": "https://p2flux.com",
   "support": {
     "issues": "https://github.com/P2Flux/laravel/issues",
@@ -13,11 +23,11 @@
   "require": {
     "php": "^8.2",
     "p2flux/sdk-php": "^0.7.3",
-    "illuminate/contracts": "^11.0 || ^12.0 || ^13.0",
-    "illuminate/support": "^11.0 || ^12.0 || ^13.0"
+    "illuminate/contracts": "^12.61.1 || ^13.12",
+    "illuminate/support": "^12.61.1 || ^13.12"
   },
   "require-dev": {
-    "orchestra/testbench": "^9.0 || ^10.0 || ^11.0",
+    "orchestra/testbench": "^10.0 || ^11.0",
     "phpstan/phpstan": "^2.1",
     "phpunit/phpunit": "^11.5.50 || ^12.5.8"
   },
@@ -42,7 +52,11 @@
     "lint": "find src config tests examples -name '*.php' -print0 | xargs -0 -n1 php -l > /dev/null",
     "analyse": "phpstan analyse",
     "test": "phpunit",
-    "check": ["@lint", "@analyse", "@test"]
+    "check": [
+      "@lint",
+      "@analyse",
+      "@test"
+    ]
   },
   "config": {
     "sort-packages": true

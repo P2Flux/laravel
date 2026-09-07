@@ -24,8 +24,12 @@ p2flux/laravel  ->  p2flux/sdk-php  ->  the P2Flux API
 | | |
 |---|---|
 | PHP | 8.2+ (8.3+ on Laravel 13) |
-| Laravel | 11, 12, 13 |
+| Laravel | 12.61.1+, 13.12+ |
 | Dependencies | `p2flux/sdk-php`, `illuminate/support`, `illuminate/contracts` |
+
+Those floors are not arbitrary. Every Laravel 11 release, and the earlier 12 and 13 patches, carry
+an unresolved security advisory, so Composer refuses to install them by default. Requiring versions
+below the floor would mean shipping you a framework your own `composer audit` flags.
 
 ## Nothing to register
 
