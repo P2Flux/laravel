@@ -58,6 +58,9 @@ jobs:
 
       - run: composer lint
 
+      # Known-vulnerable dependencies fail the row they resolve in. Free, local to Composer.
+      - run: composer audit
+
       # Static analysis needs one resolved dependency set, not nine; the newest row is enough.
       - name: Static analysis
         if: matrix.laravel == 13 && matrix.php == '8.3' && matrix.dependencies == 'stable'
