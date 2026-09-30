@@ -41,6 +41,12 @@ final class P2FluxServiceProvider extends ServiceProvider
 
     public function boot(): void
     {
+        /* `p2flux.paywall` - charge AI agents for a route. Registered through the container rather
+         * than the Router class, so this package keeps depending on illuminate/support alone. */
+        if ($this->app->bound('router')) {
+            $this->app->make('router')->aliasMiddleware('p2flux.paywall', Http\Middleware\Paywall::class);
+        }
+
         if (!$this->app->runningInConsole()) {
             return;
         }

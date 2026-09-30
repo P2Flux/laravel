@@ -1,5 +1,15 @@
 # Changelog
 
+## 0.2.0 - unreleased
+
+### Added
+
+- **`p2flux.paywall` middleware** — charge AI agents for a route over x402:
+  `->middleware('p2flux.paywall')`, `:0.20` for a route's own price, `,agents` to let browsers pass
+  free. Config `p2flux.paywall` (`recipient`, `price`, `prepaid`, `on_unavailable`). It is the PHP
+  SDK's `P2Flux\Paywall` with Laravel's request, response and cache.
+- Requires `p2flux/sdk-php` ^0.8.0.
+
 ## 0.1.1 - 2026-09-07
 
 A pre-publication review of v0.1.0 before its first Packagist submission. Two medium findings, two

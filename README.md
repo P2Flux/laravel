@@ -186,6 +186,31 @@ Schedule::command('p2flux:charge-due')->hourly()->withoutOverlapping();
 See [subscriptions](docs/subscriptions.md) and
 [`examples/Console/ChargeDueSubscriptions.php`](examples/Console/ChargeDueSubscriptions.php).
 
+## Charge AI agents (x402 paywall)
+
+AI agents pay for a route in USDC, per request, with the open x402 standard. Set your wallet and put
+a middleware on the route:
+
+```dotenv
+P2FLUX_RECIPIENT=0xYourWallet
+```
+
+```php
+Route::get('/report', ReportController::class)->middleware('p2flux.paywall');        // config price (0.05)
+Route::get('/data', DataController::class)->middleware('p2flux.paywall:0.20');        // this route's price
+Route::get('/article/{id}', ArticleController::class)->middleware('p2flux.paywall:0.05,agents');
+```
+
+- A request without payment gets `402 Payment Required` with the price; the agent pays and repeats
+  it. The payment is settled **before** the route runs, and serves one response.
+- `,agents` charges AI agents and programs only — browsers and search engines pass free. Without it
+  every caller pays, which is what an API wants.
+- Agents pay per request (P2Flux keeps 1%, at least 0.003 USDC) or from a prepaid balance with no
+  transaction per request (3%). `p2flux.paywall.prepaid => false` offers pay-per-request only.
+- The payment requirement is kept in your default cache for an hour.
+
+Money goes to your wallet; the fee is taken on chain. No account, no API key.
+
 ## Facade
 
 Optional, and imported explicitly — this package registers no global alias:

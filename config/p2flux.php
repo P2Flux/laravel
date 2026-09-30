@@ -47,4 +47,29 @@ return [
 
     'timeout' => env('P2FLUX_TIMEOUT', 60),
 
+    /*
+    |--------------------------------------------------------------------------
+    | x402 paywall (the `p2flux.paywall` middleware)
+    |--------------------------------------------------------------------------
+    |
+    | Charge AI agents for a route, in USDC. `recipient` is your wallet on Base:
+    | every payment goes to it. `price` is per request (at least 0.01); a route
+    | can set its own: ->middleware('p2flux.paywall:0.20').
+    |
+    | `prepaid` also offers agents a prepaid balance (no transaction per request;
+    | paid out to you at 2 USDC or weekly, less 3%). Pay-per-request keeps 1%,
+    | at least 0.003 USDC.
+    |
+    | `on_unavailable`: when P2Flux cannot be reached, 'refuse' answers 503 and
+    | 'free' serves the route without payment.
+    |
+    */
+
+    'paywall' => [
+        'recipient' => env('P2FLUX_RECIPIENT'),
+        'price' => env('P2FLUX_PAYWALL_PRICE', '0.05'),
+        'prepaid' => env('P2FLUX_PAYWALL_PREPAID', true),
+        'on_unavailable' => env('P2FLUX_PAYWALL_ON_UNAVAILABLE', 'refuse'),
+    ],
+
 ];

@@ -38,6 +38,8 @@ use P2Flux\P2FluxClient;
  * @method static array<string, mixed> prepareRefund(array<string, mixed> $original, string $amountUnits)
  * @method static array<string, mixed> verifyRefund(array<string, mixed> $original, string $amountUnits, string $refundTxHash)
  * @method static array<string, mixed> resolveRefund(string $refundToken)
+ * @method static array<string, mixed> paywallChallenge(string $recipient, string $price)
+ * @method static array<string, mixed> paywallRedeem(string $recipient, string $price, string $paymentHeader, string $resource = '')
  *
  * @see \P2Flux\P2FluxClient
  */

@@ -22,7 +22,7 @@
   },
   "require": {
     "php": "^8.2",
-    "p2flux/sdk-php": "^0.7.3",
+    "p2flux/sdk-php": "^0.8.0",
     "illuminate/contracts": "^12.61.1 || ^13.12",
     "illuminate/support": "^12.61.1 || ^13.12"
   },
