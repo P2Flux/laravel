@@ -63,7 +63,7 @@ final class Paywall
             $request->headers->get('PAYMENT-SIGNATURE') ?? $request->headers->get('X-PAYMENT'),
             $request->fullUrl(),
             $request->userAgent(),
-            ['mimeType' => $request->expectsJson() ? 'application/json' : 'text/html'],
+            ['mimeType' => $request->expectsJson() ? 'application/json' : 'text/html', 'signed' => $request->headers->has('Signature-Agent')],
         );
 
         if ($result['allow'] === false) {
