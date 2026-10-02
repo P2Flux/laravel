@@ -12,11 +12,12 @@ defaults work immediately.
 | | |
 |---|---|
 | `P2Flux\P2FluxClient` in the container | Inject it anywhere. It is the official [PHP SDK](https://github.com/P2Flux/sdk-php)'s own client, not a wrapper. |
-| `config/p2flux.php` | The SDK's two options, `api_url` and `timeout`. |
+| `config/p2flux.php` | The SDK's two options, `api_url` and `timeout`, and the `paywall` settings. |
 | `P2Flux\Laravel\Facades\P2Flux` | Optional, imported explicitly. No global alias. |
 | A `php artisan about` section | API URL, timeout, installed SDK version. |
+| The `p2flux.paywall` middleware | Optional. Charges AI agents for a route over x402. See [paywall](paywall.md). |
 
-Nothing else. No tables, no models, no routes, no views, no commands, no scheduler.
+No tables, no models, no routes, no views, no commands, no scheduler.
 
 ## Configuration
 
@@ -24,6 +25,17 @@ Nothing else. No tables, no models, no routes, no views, no commands, no schedul
 P2FLUX_API_URL=https://api-test.p2flux.com   # default: https://api.p2flux.com
 P2FLUX_TIMEOUT=60
 ```
+
+| Config key | Environment | Default |
+|---|---|---|
+| `api_url` | `P2FLUX_API_URL` | `https://api.p2flux.com` |
+| `timeout` | `P2FLUX_TIMEOUT` | `60` |
+| `paywall.recipient` | `P2FLUX_RECIPIENT` | none; required by the paywall only |
+| `paywall.price` | `P2FLUX_PAYWALL_PRICE` | `0.05` |
+| `paywall.prepaid` | `P2FLUX_PAYWALL_PREPAID` | `true` |
+| `paywall.on_unavailable` | `P2FLUX_PAYWALL_ON_UNAVAILABLE` | `refuse` |
+
+The `paywall` keys matter only on routes with the `p2flux.paywall` middleware. See [paywall](paywall.md).
 
 Publishing is optional:
 
@@ -98,4 +110,5 @@ never published the config still gets the right API URL, and `P2FLUX_API_URL` st
 
 - [Payments](payments.md) · [Paying the network fee in USDC](network-fee-in-usdc.md)
 - [Subscriptions](subscriptions.md) · [Testing](testing.md) · [Production checklist](production-checklist.md)
+- [Charge AI agents](paywall.md)
 - Protocol detail: [sdk-php docs](https://github.com/P2Flux/sdk-php/tree/main/docs)

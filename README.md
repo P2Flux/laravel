@@ -12,8 +12,9 @@ on Base that settle **straight to your own wallet**. No custody, no payout step,
 
 This package is deliberately thin. It binds the official
 [PHP SDK](https://github.com/P2Flux/sdk-php)'s `P2Flux\P2FluxClient` into the container from your
-config, adds a facade, a publishable config file and an `artisan about` section — and nothing else.
-No tables, no models, no routes, no scheduler, no second SDK to keep in sync.
+config, adds a facade, a publishable config file, an `artisan about` section and an optional
+`p2flux.paywall` middleware that charges AI agents for a route. No tables, no models, no routes, no
+scheduler, no second SDK to keep in sync.
 
 ```
 p2flux/laravel  ->  p2flux/sdk-php  ->  the P2Flux API
@@ -209,7 +210,8 @@ Route::get('/article/{id}', ArticleController::class)->middleware('p2flux.paywal
   transaction per request (3%). `p2flux.paywall.prepaid => false` offers pay-per-request only.
 - The payment requirement is kept in your default cache for an hour.
 
-Money goes to your wallet; the fee is taken on chain. No account, no API key.
+Money goes to your wallet; the fee is taken on chain. No account, no API key. Every setting, the
+test-to-live checklist: [paywall](docs/paywall.md).
 
 ## Facade
 
@@ -247,6 +249,7 @@ Recipes per outcome: [testing](docs/testing.md).
 | [Payments](docs/payments.md) | Create, hosted checkout, verify, recover |
 | [Paying the network fee in USDC](docs/network-fee-in-usdc.md) | Buyers with no ETH |
 | [Subscriptions](docs/subscriptions.md) | Signup, your renewal job, recovery |
+| [Charge AI agents](docs/paywall.md) | The `p2flux.paywall` middleware, its settings, test to live |
 | [Testing](docs/testing.md) | Fake transports, canned answers |
 | [Production checklist](docs/production-checklist.md) | Before real money |
 | [Examples](examples/) | Controllers, commands and a test, as application code |
