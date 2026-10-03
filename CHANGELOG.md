@@ -1,5 +1,16 @@
 # Changelog
 
+## 0.4.0 - 2026-10-04
+
+### Added
+
+- Payment links through the facade: `P2Flux::createPaymentLink()`, `paymentLinkStatus()`,
+  `collectPaymentLink()`, `stopPaymentLink()`, `openPaymentLink()` (p2flux/sdk-php 0.10).
+
+### Changed
+
+- Requires `p2flux/sdk-php` `^0.10.0`.
+
 ## 0.3.0 - 2026-10-03
 
 ### Added
