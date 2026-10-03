@@ -5,7 +5,7 @@
 ### Added
 
 - Payment links through the facade: `P2Flux::createPaymentLink()`, `paymentLinkStatus()`,
-  `collectPaymentLink()`, `stopPaymentLink()`, `openPaymentLink()` (p2flux/sdk-php 0.10).
+  `collectPaymentLink()`, `stopPaymentLink()`, `openPaymentLink()`, `subscribePaymentLink()` (p2flux/sdk-php 0.10).
 
 ### Changed
 

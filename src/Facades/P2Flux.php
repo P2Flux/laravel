@@ -41,6 +41,7 @@ use P2Flux\P2FluxClient;
  * @method static array<string, mixed> resolveRefund(string $refundToken)
  * @method static array<string, mixed> createPaymentLink(array<string, mixed> $terms)
  * @method static array<string, mixed> openPaymentLink(string $link, ?string $payer = null)
+ * @method static \P2Flux\ChargeResult subscribePaymentLink(string $link, string $subscriptionRef)
  * @method static array<string, mixed> paymentLinkStatus(array<string, string> $token)
  * @method static \P2Flux\ChargeResult collectPaymentLink(string $manage, string $subscriptionId)
  * @method static array<string, mixed> stopPaymentLink(string $manage, string $subscriptionId)
