@@ -52,7 +52,7 @@ final class CancelSubscriptionController extends Controller
         }
 
         return response()->json([
-            'cancel_page' => config('services.p2flux.checkout_url') . '/#/cancel/' . rawurlencode($session['cancel_token']),
+            'cancel_page' => $this->p2flux->checkoutLink('cancel', $session['cancel_token']),
             'expires_at' => $session['expires_at'] ?? null,
         ]);
     }

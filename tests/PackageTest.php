@@ -128,7 +128,7 @@ final class PackageTest extends TestCase
     {
         // P2Flux v1 has no API authentication. A key here would be an invented concept.
         $config = config('p2flux');
-        $this->assertSame(['api_url', 'timeout', 'paywall'], array_keys($config));
+        $this->assertSame(['api_url', 'timeout', 'checkout_url', 'paywall'], array_keys($config));
 
         $source = (string) file_get_contents(__DIR__ . '/../config/p2flux.php');
         foreach (['P2FLUX_API_KEY', 'api_key', 'secret', 'private_key'] as $forbidden) {

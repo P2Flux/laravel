@@ -19,6 +19,7 @@ use P2Flux\P2FluxClient;
  *
  * @method static array<string, mixed> capabilities()
  * @method static array<string, mixed> createPayment(array<string, mixed> $terms)
+ * @method static string checkoutLink(string $page, string $token)
  * @method static array<string, mixed> resolvePayment(string $intent)
  * @method static array<string, mixed> verifyPayment(string $intent, string $txHash, ?string $settlementReceipt = null)
  * @method static array<string, mixed> recoverPayment(string $intent)

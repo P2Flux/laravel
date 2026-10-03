@@ -10,8 +10,8 @@ declare(strict_types=1);
  * own signature and the contract refuses a second charge in a period. Anything asking you to paste
  * a P2Flux key is describing a product that does not exist.
  *
- * Your payout wallet and your checkout URL are application values, not SDK options, so they belong
- * in your own config rather than here.
+ * Your payout wallet is an application value, not an SDK option, so it belongs in your own config
+ * rather than here.
  */
 return [
 
@@ -46,6 +46,21 @@ return [
     */
 
     'timeout' => env('P2FLUX_TIMEOUT', 60),
+
+    /*
+    |--------------------------------------------------------------------------
+    | Checkout URL
+    |--------------------------------------------------------------------------
+    |
+    | Where buyers open the checkout; P2Flux::checkoutLink('pay', $intent)
+    | builds the address. Empty means P2Flux's hosted checkout for the API
+    | above (https://pay.p2flux.com or https://pay-test.p2flux.com). Set it
+    | when you host the checkout yourself, e.g. https://pay.yourcompany.com
+    | (https://p2flux.com/docs/self-hosted-checkout.html).
+    |
+    */
+
+    'checkout_url' => env('P2FLUX_CHECKOUT_URL'),
 
     /*
     |--------------------------------------------------------------------------

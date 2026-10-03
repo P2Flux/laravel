@@ -62,16 +62,19 @@ build the client for that stored environment when you verify, charge or refund i
 
 ### Your own values
 
-Your payout wallet and checkout URL are application values, not SDK options, so they belong in your
-config rather than the package's:
+Your payout wallet is an application value, not an SDK option, so it belongs in your config rather
+than the package's:
 
 ```php
 // config/services.php
 'p2flux' => [
     'recipient' => env('P2FLUX_RECIPIENT'),
-    'checkout_url' => env('P2FLUX_CHECKOUT_URL', 'https://pay.p2flux.com'),
 ],
 ```
+
+The checkout address comes from the client: `$p2flux->checkoutLink('pay', $payment['intent'])`. It is
+P2Flux's hosted checkout for your `P2FLUX_API_URL` unless you set `P2FLUX_CHECKOUT_URL`, for example when
+you [host the checkout yourself](https://p2flux.com/docs/self-hosted-checkout.html).
 
 ## Injection
 

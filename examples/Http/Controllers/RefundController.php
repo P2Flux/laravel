@@ -63,7 +63,7 @@ final class RefundController extends Controller
         }
 
         return response()->json([
-            'refund_page' => config('services.p2flux.checkout_url') . '/#/refund/' . rawurlencode($prep['refund_token']),
+            'refund_page' => $this->p2flux->checkoutLink('refund', $prep['refund_token']),
             'send' => ['from' => $prep['merchant'], 'to' => $prep['payer'], 'amount' => $prep['refund_amount']],
         ]);
     }

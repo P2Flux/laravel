@@ -41,7 +41,7 @@ final class SubscriptionSignupController extends Controller
 
         return response()->json([
             'subscription' => $subscription->id,
-            'checkout' => config('services.p2flux.checkout_url') . '/#/subscribe/' . rawurlencode($setup['setup_token']),
+            'checkout' => $this->p2flux->checkoutLink('subscribe', $setup['setup_token']),
         ]);
     }
 

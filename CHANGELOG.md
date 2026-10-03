@@ -1,5 +1,20 @@
 # Changelog
 
+## 0.3.0 - 2026-10-03
+
+### Added
+
+- **`checkout_url` config** (`P2FLUX_CHECKOUT_URL`) — where buyers open the checkout, passed to the
+  SDK. Empty means P2Flux's hosted checkout for `P2FLUX_API_URL`; set it when you host the checkout
+  yourself (https://p2flux.com/docs/self-hosted-checkout.html).
+- `P2Flux::checkoutLink($page, $token)` on the facade (PHP SDK 0.9).
+
+### Changed
+
+- Requires `p2flux/sdk-php` ^0.9.0.
+- The examples and docs build checkout links with `checkoutLink()` instead of an application
+  `services.p2flux.checkout_url` value.
+
 ## 0.2.0 - 2026-10-01
 
 ### Added

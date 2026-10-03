@@ -26,15 +26,18 @@ final class P2FluxServiceProvider extends ServiceProvider
         // Defaults come from the package, so a fresh install works without publishing anything.
         $this->mergeConfigFrom(__DIR__ . '/../config/p2flux.php', 'p2flux');
 
-        /* One client for the process. It holds no per-request state - just a base URL, a timeout and
-         * an optional transport - so a singleton is both correct and one fewer object per request.
+        /* One client for the process. It holds no per-request state - just a base URL, a timeout, a
+         * checkout address and an optional transport - so a singleton is both correct and one fewer object per request.
          * Bound by its own class name, so constructor injection of P2FluxClient simply works. */
         $this->app->singleton(P2FluxClient::class, static function (Application $app): P2FluxClient {
             $config = self::config($app);
 
+            $checkoutUrl = is_scalar($config['checkout_url'] ?? null) ? trim((string) $config['checkout_url']) : '';
+
             return new P2FluxClient([
                 'apiUrl' => self::apiUrl($config),
                 'timeout' => self::timeout($config),
+                ...($checkoutUrl === '' ? [] : ['checkoutUrl' => $checkoutUrl]),
             ]);
         });
     }

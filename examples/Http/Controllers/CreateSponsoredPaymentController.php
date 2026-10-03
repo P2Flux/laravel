@@ -71,7 +71,7 @@ final class CreateSponsoredPaymentController extends Controller
         return response()->json([
             'order' => $order->id,
             'buyer_needs_eth' => !$sponsored,
-            'checkout' => config('services.p2flux.checkout_url') . '/#/pay/' . rawurlencode($payment['intent']),
+            'checkout' => $this->p2flux->checkoutLink('pay', $payment['intent']),
         ]);
     }
 }

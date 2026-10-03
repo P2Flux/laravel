@@ -40,7 +40,7 @@ final class RestoreAllowanceController extends Controller
         }
 
         return response()->json([
-            'approve_page' => config('services.p2flux.checkout_url') . '/#/approve/' . rawurlencode($session['approve_token']),
+            'approve_page' => $this->p2flux->checkoutLink('approve', $session['approve_token']),
             'expires_at' => $session['expires_at'] ?? null,
         ]);
         // The checkout posts `p2flux.allowance.restored`; then charge() the same subscription again.

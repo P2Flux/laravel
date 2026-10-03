@@ -36,7 +36,7 @@ recovery both need it, and recovery still works long after the intent expires.
 The intent rides in the URL fragment, which browsers never send to a server or put in `Referer`:
 
 ```php
-$checkout = config('services.p2flux.checkout_url') . '/#/pay/' . rawurlencode($payment['intent']);
+$checkout = $this->p2flux->checkoutLink('pay', $payment['intent']);
 ```
 
 ## Verify

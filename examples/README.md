@@ -31,7 +31,6 @@ options):
 ```php
 'p2flux' => [
     'recipient' => env('P2FLUX_RECIPIENT'),                                  // your payout wallet
-    'checkout_url' => env('P2FLUX_CHECKOUT_URL', 'https://pay.p2flux.com'),
 ],
 ```
 

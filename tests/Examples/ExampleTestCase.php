@@ -43,7 +43,6 @@ abstract class ExampleTestCase extends TestCase
 
         config([
             'services.p2flux.recipient' => '0x' . str_repeat('e', 40),
-            'services.p2flux.checkout_url' => 'https://pay-test.p2flux.com',
         ]);
 
         /* A transaction helper that runs the closure, and nothing more. It implements the resolver
@@ -77,6 +76,7 @@ abstract class ExampleTestCase extends TestCase
 
         $this->app->instance(P2FluxClient::class, new P2FluxClient([
             'apiUrl' => 'https://api.example',
+            'checkoutUrl' => 'https://pay-test.p2flux.com',
             'timeout' => 5,
             'transport' => $transport ?? $this->transport,
         ]));

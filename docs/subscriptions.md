@@ -17,7 +17,7 @@ $setup = $this->p2flux->createSubscription([
 ]);
 
 $subscription->update(['salt' => $setup['salt']]);
-$checkout = config('services.p2flux.checkout_url') . '/#/subscribe/' . rawurlencode($setup['setup_token']);
+$checkout = $this->p2flux->checkoutLink('subscribe', $setup['setup_token']);
 ```
 
 The customer approves USDC once and signs one EIP-712 authorization. The checkout posts the

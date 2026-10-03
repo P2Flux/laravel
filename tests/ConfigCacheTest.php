@@ -59,6 +59,21 @@ final class ConfigCacheTest extends TestCase
     }
 
     #[Test]
+    public function the_checkout_address_reaches_the_sdk(): void
+    {
+        // Unset: the hosted checkout of the configured API.
+        config(['p2flux.api_url' => 'https://api-test.p2flux.com', 'p2flux.checkout_url' => null]);
+        $this->app->forgetInstance(P2FluxClient::class);
+        $this->assertSame('https://pay-test.p2flux.com/#/pay/t', $this->app->make(P2FluxClient::class)->checkoutLink('pay', 't'));
+
+        // Set (a self-hosted checkout), and still set after config:cache.
+        config(['p2flux.checkout_url' => 'https://pay.example.com/']);
+        Artisan::call('config:cache');
+        $this->reloadFromCachedConfig();
+        $this->assertSame('https://pay.example.com/#/pay/t', $this->app->make(P2FluxClient::class)->checkoutLink('pay', 't'));
+    }
+
+    #[Test]
     public function cached_settings_reach_the_sdk(): void
     {
         config(['p2flux.api_url' => 'https://api-test.p2flux.com', 'p2flux.timeout' => 21]);
