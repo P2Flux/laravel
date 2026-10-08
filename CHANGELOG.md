@@ -1,5 +1,13 @@
 # Changelog
 
+## 0.4.1 - 2026-10-08
+
+### Changed
+
+- Accepts `p2flux/sdk-php` `^0.10.0 || ^0.11.0`. With 0.11 the facade's errors know the sanctions
+  screening codes `PAYER_SANCTIONED` (stop the subscription) and `RECIPIENT_SANCTIONED` (do not
+  retry), and `verifyPayment()` passes through `screening`.
+
 ## 0.4.0 - 2026-10-04
 
 ### Added
