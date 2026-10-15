@@ -11,8 +11,10 @@ The flow, and which step may mark an order paid.
 6. Laravel        mark the order paid              -> only on a valid verdict
 ```
 
-**P2Flux sends no webhooks.** There is no server-to-server callback to wait for: the browser tells
-you where to look, and your own verification decides what it means.
+**Webhooks are optional.** You need no server-to-server callback: the browser tells you where to
+look, and your own verification decides what it means. To be told about payments whose buyer
+closed the page, add `notify_url` and confirm each notification with `P2Flux::handleNotification()`
+(see the README), or run `recoverPayment()` from a scheduled job.
 
 Runnable: [`examples/Http/Controllers/CreatePaymentController.php`](../examples/Http/Controllers/CreatePaymentController.php),
 [`VerifyPaymentController.php`](../examples/Http/Controllers/VerifyPaymentController.php).

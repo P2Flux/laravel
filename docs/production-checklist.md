@@ -7,7 +7,8 @@ Short, and every line is something that has gone wrong in a real integration.
 - [ ] **Payments are created in Laravel**, with the recipient and amount from config and your own
       records — never from a request body. → [Payments](payments.md)
 - [ ] **Nothing is fulfilled on a browser message.** `p2flux.payment.completed` is a claim; your
-      `verifyPayment()` verdict is the decision. There are no webhooks to wait for.
+      `verifyPayment()` verdict is the decision. A webhook, if you use one, is a claim too:
+      only `handleNotification()`'s `confirmed` counts, fulfilled once per `dedupe_key`.
 - [ ] **The paid transition happens once**, inside `DB::transaction()` with `lockForUpdate()` and the
       status re-checked inside the lock. Repeat callbacks are normal.
 - [ ] **Your own reference is stored with the intent**, before the buyer leaves the page.

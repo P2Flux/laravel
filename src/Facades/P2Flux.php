@@ -45,6 +45,7 @@ use P2Flux\P2FluxClient;
  * @method static array<string, mixed> paymentLinkStatus(array<string, string> $token)
  * @method static \P2Flux\ChargeResult collectPaymentLink(string $manage, string $subscriptionId)
  * @method static array<string, mixed> stopPaymentLink(string $manage, string $subscriptionId)
+ * @method static array<string, mixed> handleNotification(string|array<string, mixed> $notification, array<string, string> $expect)
  * @method static array<string, mixed> paywallChallenge(string $recipient, string $price, bool $usage = false)
  * @method static array<string, mixed> paywallVerify(string $recipient, string $maxPrice, string $paymentHeader)
  * @method static array<string, mixed> paywallRedeem(string $recipient, string $price, string $paymentHeader, string $resource = '', ?string $amount = null)

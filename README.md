@@ -113,8 +113,8 @@ addEventListener('message', (event) => {
 
 ## Verify before fulfilling
 
-**P2Flux sends no webhooks.** The browser message says what a wallet did; your Laravel backend's
-verdict is what decides.
+**Webhooks are optional and never decide.** The browser message (or a webhook) says what happened;
+your Laravel backend's verdict is what decides.
 
 ```php
 $verdict = $this->p2flux->verifyPayment($order->p2flux_intent, $txHash, $settlementReceipt);
@@ -137,6 +137,30 @@ DB::transaction(function () use ($order, $verdict): void {
 
 Lost the hash entirely? `recoverPayment($intent)` finds the settlement from the intent alone.
 Full walk-through: [payments](docs/payments.md).
+
+### Optional webhooks
+
+With `p2flux/sdk-php` 0.12+, add `notify_url` when creating a payment (or a payment link) and P2Flux
+POSTs to it once the payment is verified on chain - no queue worker or scheduler of your own needed:
+
+```php
+$payment = P2Flux::createPayment([
+    'recipient'  => config('p2flux.recipient'),
+    'amount'     => $order->total,
+    'notify_url' => route('p2flux.notify', $order),   // a public https URL, excluded from CSRF
+]);
+
+// routes/web.php: Route::post('/p2flux/notify/{order}', ...)->name('p2flux.notify');
+$result = P2Flux::handleNotification($request->getContent(), ['reference' => $order->p2flux_reference]);
+if ($result['confirmed']) {
+    $order->markPaidOnce($result['dedupe_key']);   // idempotent, under lockForUpdate()
+}
+return response()->noContent();   // a P2FluxException (not final yet) becomes a 5xx: it is sent again
+```
+
+`handleNotification` asks the API again and checks the answer is for this order; the notification
+itself carries no secret. If the create response has no `notify_url`, the payment is not watched -
+keep verifying as above. Details: https://p2flux.com/docs/webhooks.html
 
 ## Pay the network fee in USDC
 

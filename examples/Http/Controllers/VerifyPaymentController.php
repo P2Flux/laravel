@@ -16,7 +16,7 @@ use P2Flux\P2FluxException;
 /**
  * The trust boundary.
  *
- * P2Flux sends no webhooks. The browser posts what the hosted checkout told it, and that is a claim.
+ * The browser posts what the hosted checkout told it (or a webhook arrives), and that is a claim.
  * This action checks the claim against the chain and is the only place an order becomes paid.
  */
 final class VerifyPaymentController extends Controller

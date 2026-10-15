@@ -1,5 +1,17 @@
 # Changelog
 
+## 0.5.0 - 2026-10-15
+
+### Added
+
+- Optional webhooks through the facade: `notify_url` on `P2Flux::createPayment()` /
+  `createPaymentLink()`, and `P2Flux::handleNotification()` to confirm a notification before you
+  fulfil (p2flux/sdk-php 0.12). See the README.
+
+### Changed
+
+- Accepts `p2flux/sdk-php` `^0.10.0 || ^0.11.0 || ^0.12.0`.
+
 ## 0.4.1 - 2026-10-08
 
 ### Changed

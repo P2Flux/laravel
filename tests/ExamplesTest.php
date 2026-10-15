@@ -123,13 +123,12 @@ final class ExamplesTest extends BaseTestCase
     #[DataProvider('markdownFiles')]
     public function nothing_claims_a_feature_p2flux_does_not_have(string $file): void
     {
-        /* Targeted phrases, not sentence parsing. There are no webhooks, there is no API key, and
+        /* Targeted phrases, not sentence parsing. Webhooks are optional and unsigned, there is no API key, and
          * the sponsored path is a network fee paid in USDC rather than a fee waived. */
         $text = strtolower((string) file_get_contents($file));
 
         foreach ([
             'webhook secret', 'webhook signature', 'verify the webhook', 'register a webhook',
-            'webhook url', 'webhook endpoint', 'configure a webhook', 'webhook handler',
             'p2flux_api_key', 'your api key', "'api_key'", 'authorization: bearer', 'x-api-key',
             'gas-free', 'gas free', 'free transaction', 'no network fee',
             'composer require p2flux/p2flux-php', 'npm install github:p2flux',
@@ -157,6 +156,6 @@ final class ExamplesTest extends BaseTestCase
         $readme = (string) file_get_contents(self::ROOT . '/README.md');
 
         $this->assertStringContainsString('composer require p2flux/laravel', $readme);
-        $this->assertStringContainsString('no webhooks', strtolower($readme));
+        $this->assertStringContainsString('webhooks are optional', strtolower($readme));
     }
 }
