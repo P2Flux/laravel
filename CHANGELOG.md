@@ -1,5 +1,13 @@
 # Changelog
 
+## 0.5.1 - 2026-10-22
+
+### Changed
+
+- Allows `p2flux/sdk-php` 0.13: `return_url` on `P2Flux::createPayment()` / `createPaymentLink()`
+  sends the buyer back to your site after paying on the hosted checkout, and the answer carries
+  `checkout_url`. The facade passes both through; nothing else changes.
+
 ## 0.5.0 - 2026-10-15
 
 ### Added
