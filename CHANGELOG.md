@@ -5,7 +5,7 @@
 ### Changed
 
 - Allows `p2flux/sdk-php` 0.14: `'private_payment' => 'hinkal'` on `P2Flux::createPayment()` /
-  `createPaymentLink()` (one-time kinds) adds "Pay privately with Hinkal" to the hosted checkout; a
+  `createPaymentLink()` (`once` and `reusable` links, not subscriptions) adds "Pay privately with Hinkal" to the hosted checkout; a
   verification's `accounting.refundable === false` marks a payment to refund by hand.
   (https://p2flux.com/docs/payments.html#private)
 
