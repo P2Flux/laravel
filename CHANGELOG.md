@@ -1,5 +1,14 @@
 # Changelog
 
+## 0.6.0 - unreleased
+
+### Added
+
+- Allows `p2flux/sdk-php` 0.15: signed webhooks (`P2Flux::verifyWebhook()`, or `'signature'` in
+  `handleNotification()`), `merchant_ref` on creates and `P2Flux::charge($ref, $merchantRef)`,
+  `checkMerchantRef()`, `webhookDeliveries()` / `redeliverWebhook()`. The facade documents them; the
+  README has a middleware example for signed webhooks.
+
 ## 0.5.2 - 2026-10-27
 
 ### Changed

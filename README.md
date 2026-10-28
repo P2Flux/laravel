@@ -162,6 +162,52 @@ return response()->noContent();   // a P2FluxException (not final yet) becomes a
 itself carries no secret. If the create response has no `notify_url`, the payment is not watched -
 keep verifying as above. Details: https://p2flux.com/docs/webhooks.html
 
+### Signed webhooks
+
+With `p2flux/sdk-php` 0.15+, every delivery carries `p2flux-signature: t=<unix>,kid=<id>,v1=<Ed25519>`
+over `{$t}.{$rawBody}`, signed with P2Flux's public key (from `capabilities()`; no shared secret, needs
+`ext-sodium`, bundled with PHP). Check it on the raw body before anything else - a small middleware:
+
+```php
+// app/Http/Middleware/P2FluxSignature.php
+use Closure;
+use Illuminate\Http\Request;
+use P2Flux\Laravel\Facades\P2Flux;
+use P2Flux\P2FluxException;
+
+final class P2FluxSignature
+{
+    public function handle(Request $request, Closure $next)
+    {
+        try {
+            P2Flux::verifyWebhook($request->getContent(), (string) $request->header('p2flux-signature'));
+        } catch (P2FluxException $e) {
+            // WEBHOOK_SIGNATURE_INVALID / WEBHOOK_TOO_OLD are refusals; anything else (the keys could not
+            // be fetched) is temporary, so answer 5xx and P2Flux sends it again.
+            abort($e->action === 'INVALID_REQUEST' ? 401 : 503);
+        }
+
+        return $next($request);
+    }
+}
+
+// routes/web.php
+Route::post('/p2flux/notify/{order}', NotifyController::class)
+    ->middleware(P2FluxSignature::class)->name('p2flux.notify');
+```
+
+Or in one step in the controller: `P2Flux::handleNotification($request->getContent(), ['reference' =>
+$order->p2flux_reference, 'signature' => (string) $request->header('p2flux-signature')])` answers
+`confirmed => false` with `reason` `WEBHOOK_SIGNATURE_INVALID` / `WEBHOOK_TOO_OLD` for a bad one.
+A signature proves P2Flux sent the message, not that money moved: keep `handleNotification`, which
+still asks the API. `P2Flux::webhookDeliveries(['intent' => ...])` shows each attempt (7 days) and
+`P2Flux::redeliverWebhook($token, $eventId)` sends a pending one now.
+
+`merchant_ref` (your order number: ASCII letters, digits and `. _ : / # -`, 1-64 characters) passes
+through `createPayment`, `createPaymentLink`, `createSubscription` and `P2Flux::charge($ref,
+$merchantRef)`; an API that does not support it yet refuses the field. Full reference:
+[sdk-php README](https://github.com/P2Flux/sdk-php#readme).
+
 ## Pay the network fee in USDC
 
 A buyer holding USDC and **no ETH** can still pay. They sign a token authorization, the P2Flux

@@ -46,6 +46,28 @@ final class SdkBehaviourTest extends TestCase
     }
 
     #[Test]
+    public function a_signed_webhook_is_checked_through_the_facade_with_the_api_keys(): void
+    {
+        if (!method_exists(P2FluxClient::class, 'verifyWebhook')) {
+            $this->markTestSkipped('p2flux/sdk-php < 0.15 has no signed webhooks');
+        }
+        $pair = sodium_crypto_sign_keypair();
+        $b64 = static fn (string $bytes): string => rtrim(strtr(base64_encode($bytes), '+/', '-_'), '=');
+        $this->bind(['/v1/capabilities' => [200, ['webhook_signing_keys' => [
+            ['kid' => 'k1', 'alg' => 'Ed25519', 'public_key' => $b64(sodium_crypto_sign_publickey($pair))],
+        ]]]]);
+        $body = '{"id":"evt_1","type":"payment.paid","data":{}}';
+        $t = time();
+        $header = "t=$t,kid=k1,v1=" . $b64(sodium_crypto_sign_detached("$t.$body", sodium_crypto_sign_secretkey($pair)));
+
+        $this->assertSame('evt_1', P2Flux::verifyWebhook($body, $header)['id']);
+
+        $this->expectException(P2FluxException::class);
+        $this->expectExceptionMessage('WEBHOOK_SIGNATURE_INVALID');
+        P2Flux::verifyWebhook($body . ' ', $header);
+    }
+
+    #[Test]
     public function an_unreachable_api_is_a_retryable_charge_result_not_a_decline(): void
     {
         /* The distinction that protects money: a transport failure says nothing about whether the
