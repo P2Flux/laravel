@@ -166,7 +166,9 @@ keep verifying as above. Details: https://p2flux.com/docs/webhooks.html
 
 With `p2flux/sdk-php` 0.15+, every delivery carries `p2flux-signature: t=<unix>,kid=<id>,v1=<Ed25519>`
 over `{$t}.{$rawBody}`, signed with P2Flux's public key (from `capabilities()`; no shared secret, needs
-`ext-sodium`, bundled with PHP). Check it on the raw body before anything else - a small middleware:
+`ext-sodium`, bundled with PHP); the API signs from release 2026-11, so a delivery from an older API has
+no header. Check it on the raw body before anything else - a small middleware that skips a request
+without the header and refuses (4xx/5xx, never 2xx) one whose signature is present but bad:
 
 ```php
 // app/Http/Middleware/P2FluxSignature.php
@@ -179,8 +181,14 @@ final class P2FluxSignature
 {
     public function handle(Request $request, Closure $next)
     {
+        $signature = $request->header('p2flux-signature');
+        if ($signature === null) {
+            // No header: an API before the signing release. Let it through - handleNotification's API
+            // check decides on money either way. Only a present-but-bad signature is refused.
+            return $next($request);
+        }
         try {
-            P2Flux::verifyWebhook($request->getContent(), (string) $request->header('p2flux-signature'));
+            P2Flux::verifyWebhook($request->getContent(), (string) $signature);
         } catch (P2FluxException $e) {
             // WEBHOOK_SIGNATURE_INVALID / WEBHOOK_TOO_OLD are refusals; anything else (the keys could not
             // be fetched) is temporary, so answer 5xx and P2Flux sends it again.
@@ -197,7 +205,7 @@ Route::post('/p2flux/notify/{order}', NotifyController::class)
 ```
 
 Or in one step in the controller: `P2Flux::handleNotification($request->getContent(), ['reference' =>
-$order->p2flux_reference, 'signature' => (string) $request->header('p2flux-signature')])` answers
+$order->p2flux_reference, 'signature' => $request->header('p2flux-signature')])` (null when absent) answers
 `confirmed => false` with `reason` `WEBHOOK_SIGNATURE_INVALID` / `WEBHOOK_TOO_OLD` for a bad one.
 A signature proves P2Flux sent the message, not that money moved: keep `handleNotification`, which
 still asks the API. `P2Flux::webhookDeliveries(['intent' => ...])` shows each attempt (7 days) and
