@@ -190,8 +190,13 @@ final class P2FluxSignature
         try {
             P2Flux::verifyWebhook($request->getContent(), (string) $signature);
         } catch (P2FluxException $e) {
-            // WEBHOOK_SIGNATURE_INVALID / WEBHOOK_TOO_OLD are refusals; anything else (the keys could not
-            // be fetched) is temporary, so answer 5xx and P2Flux sends it again.
+            // WEBHOOK_TOO_OLD usually means this server's clock is off by more than 5 minutes; every retry
+            // would fail the same way, so let it through - handleNotification's API check decides.
+            if ($e->status === 'WEBHOOK_TOO_OLD') {
+                return $next($request);
+            }
+            // WEBHOOK_SIGNATURE_INVALID is a refusal; anything else (the keys could not be fetched) is
+            // temporary, so answer 5xx and P2Flux sends it again.
             abort($e->action === 'INVALID_REQUEST' ? 401 : 503);
         }
 
