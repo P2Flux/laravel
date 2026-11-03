@@ -50,6 +50,8 @@ use P2Flux\P2FluxClient;
  * @method static bool checkMerchantRef(string $reference, string $salt, string $merchantRef)
  * @method static array<string, mixed> webhookDeliveries(array{intent?: string, manage?: string} $token)
  * @method static array<string, mixed> redeliverWebhook(array{intent?: string, manage?: string} $token, string $eventId)
+ * @method static array<string, mixed> rates(array{from: string, to: string} $range)
+ * @method static array<string, mixed> createMerchantToken(array{wallet: string, signature: string, issued_at: int} $proof)
  * @method static array<string, mixed> paywallChallenge(string $recipient, string $price, bool $usage = false)
  * @method static array<string, mixed> paywallVerify(string $recipient, string $maxPrice, string $paymentHeader)
  * @method static array<string, mixed> paywallRedeem(string $recipient, string $price, string $paymentHeader, string $resource = '', ?string $amount = null)

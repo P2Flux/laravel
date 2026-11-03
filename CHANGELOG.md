@@ -8,6 +8,10 @@
   `handleNotification()`), `merchant_ref` on creates and `P2Flux::charge($ref, $merchantRef)`,
   `checkMerchantRef()`, `webhookDeliveries()` / `redeliverWebhook()`. The facade documents them; the
   README has a middleware example for signed webhooks.
+- The rest of sdk-php 0.15 works through the same client: `P2Flux::rates()` (`/v1/rates`) and
+  `P2Flux::createMerchantToken()` (higher limits) on the facade; the statement is
+  `P2Flux\Statement::statement()` / `Statement::toCsv()` (static, no facade); a refund sent from a Safe
+  verifies with `P2Flux::verifyRefund()` like any other.
 
 ## 0.5.2 - 2026-10-27
 

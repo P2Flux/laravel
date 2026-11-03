@@ -309,6 +309,10 @@ $caps = P2Flux::capabilities();
 It resolves the same container singleton. Constructor injection stays the recommended interface,
 because it is what makes your own classes testable.
 
+Every `P2FluxClient` method works through it, including `P2Flux::rates()` and
+`P2Flux::createMerchantToken()`; the accounting statement is `P2Flux\Statement::statement()` (static),
+and a refund sent from a Safe verifies with `P2Flux::verifyRefund()` like any other.
+
 ## Testing
 
 Your application never needs to spend crypto to be tested. The SDK takes a `transport` callable, so
