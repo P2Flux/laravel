@@ -25,6 +25,7 @@ use P2Flux\P2FluxClient;
  * @method static array<string, mixed> recoverPayment(string $intent)
  * @method static array<string, mixed> sponsorPayment(string $intent, string $quote, string $payer, string $signature)
  * @method static array<string, mixed> createSubscription(array<string, mixed> $terms)
+ * @method static array<string, mixed> handleSubscriptionCreated(string $rawBody, string $signature, array<string, mixed> $expect)
  * @method static array<string, mixed> resolveSubscription(string $setupToken, ?string $gasPaymentMode = null, ?string $payer = null)
  * @method static array<string, mixed> finalizeSubscription(string $setupToken, string $payer, string $signature, array<string, string>|null $sponsorship = null)
  * @method static \P2Flux\ChargeResult charge(string $subscriptionRef, ?string $merchantRef = null)
