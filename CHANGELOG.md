@@ -7,6 +7,9 @@
 - Facade: pay from an exchange (needs `p2flux/sdk-php` 0.16) - `P2Flux::startExchangePayment()`,
   `exchangePaymentStatus()`, `acceptExchangePayment()`, `setExchangeSeller()`, `exchangeSellerStatus()` and
   `exchangeOptInMessage()`. `P2Flux::createPayment()` takes `exchange` / `exchange_tolerance_bps` unchanged.
+- Facade: contracts v2 (needs `p2flux/sdk-php` 0.16) - `P2Flux::resolvePayment($intent, $sponsored = false)` and
+  `P2Flux::prepareAllowanceRevocation($contractVersion = null)`; `createPayment()` / `createSubscription()` take
+  `contract_version` unchanged.
 
 ## 0.6.0 - 2026-11-04
 
