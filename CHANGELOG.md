@@ -1,5 +1,13 @@
 # Changelog
 
+## Unreleased
+
+### Added
+
+- Facade: pay from an exchange (needs `p2flux/sdk-php` 0.16) - `P2Flux::startExchangePayment()`,
+  `exchangePaymentStatus()`, `acceptExchangePayment()`, `setExchangeSeller()`, `exchangeSellerStatus()` and
+  `exchangeOptInMessage()`. `P2Flux::createPayment()` takes `exchange` / `exchange_tolerance_bps` unchanged.
+
 ## 0.6.0 - 2026-11-04
 
 ### Added
